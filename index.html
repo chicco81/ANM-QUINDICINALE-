@@ -1126,17 +1126,17 @@ function DriverDetail({driver,onBack,onUpdate,fire}){
     const file=e.target.files[0];
     if(!file)return;
 
-    // Recupera chiave API salvata
-    const apiKey=localStorage.getItem("anm_anthropic_key")||"";
-    if(!apiKey){
+    // URL del Cloudflare Worker — salvato nelle impostazioni
+    const workerUrl=(localStorage.getItem("anm_worker_url")||"").trim();
+    if(!workerUrl){
       setFotoStatus("error");
-      setFotoMsg("❌ Inserisci la tua chiave API Anthropic nelle Impostazioni (tab 📖 Guida) per usare il riconoscimento foto.");
+      setFotoMsg("\u274c Inserisci l'URL del Worker Cloudflare nelle Impostazioni (tab \ud83d\udcd6 Guida) per usare il riconoscimento foto.");
       return;
     }
 
     setFotoImporting(true);
     setFotoStatus("loading");
-    setFotoMsg("🔍 Analisi foto in corso…");
+    setFotoMsg("\ud83d\udd0d Analisi foto in corso con AI\u2026");
     setImportPreview(null);
 
     try{
@@ -1149,21 +1149,17 @@ function DriverDetail({driver,onBack,onUpdate,fire}){
       const mediaType=file.type&&file.type.startsWith("image/")?file.type:"image/jpeg";
 
       const prompt="Analizza questa immagine di un quindicinale turni ANM Napoli. "+
-        "Per ogni turno trovato restituisci un oggetto JSON con questi campi: "+
+        "Per ogni turno trovato restituisci un oggetto JSON con: "+
         "day (numero 1-31), month (numero 0-11 dove 0=gennaio), year (anno intero), "+
         "tipo (uno tra: serv, riposo, ferie, malattia, permesso, festivo, spezzato_ap, spezzato_ch, disp_mattina, disp_serale, disp_notturna), "+
         "linea (es R3 oppure stringa vuota), pres (orario HH:MM oppure stringa vuota), fine (orario HH:MM oppure stringa vuota). "+
-        "Corrispondenze: SERV/SV=serv, RIP/RIPO=riposo, FER/FERIE=ferie, MAL=malattia, PERM=permesso, FEST=festivo. "+
+        "Corrispondenze: SERV/SV=serv, RIP/RIPO=riposo, FER/FERIE=ferie, MAL=malattia, PERM=permesso, FEST=festivo, "+
+        "SPEZ AP=spezzato_ap, SPEZ CH=spezzato_ch, DISP M=disp_mattina, DISP S=disp_serale, DISP N=disp_notturna. "+
         "Rispondi SOLO con un array JSON puro. Nessun testo. Nessun markdown. Se non trovi nulla: []";
 
-      const resp=await fetch("https://api.anthropic.com/v1/messages",{
+      const resp=await fetch(workerUrl,{
         method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "x-api-key":apiKey,
-          "anthropic-version":"2023-06-01",
-          "anthropic-dangerous-direct-browser-access":"true"
-        },
+        headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           model:"claude-haiku-4-5-20251001",
           max_tokens:2000,
@@ -1176,25 +1172,28 @@ function DriverDetail({driver,onBack,onUpdate,fire}){
 
       if(!resp.ok){
         const errBody=await resp.text();
-        let msg="Errore API ("+resp.status+")";
+        let msg="Errore Worker ("+resp.status+")";
         try{const j=JSON.parse(errBody);msg=j.error?.message||msg;}catch(x){}
         throw new Error(msg);
       }
 
       const data=await resp.json();
+      if(data.error) throw new Error(data.error.message||"Errore API Anthropic");
+
       const rawText=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+      if(!rawText) throw new Error("Risposta vuota. Riprova.");
 
       let parsed=[];
       try{parsed=JSON.parse(rawText);}
       catch(pe){
         const m=rawText.match(/\[[\s\S]*?\]/);
-        if(m){try{parsed=JSON.parse(m[0]);}catch(x){throw new Error("Risposta non leggibile. Riprova.");}}
-        else throw new Error("L'AI non ha restituito JSON. Riprova con foto più chiara.");
+        if(m){try{parsed=JSON.parse(m[0]);}catch(x){throw new Error("Risposta non leggibile. Riprova con foto pi\xf9 chiara.");}}
+        else throw new Error("Nessun dato strutturato. Riprova con una foto pi\xf9 nitida.");
       }
 
       if(!Array.isArray(parsed)||parsed.length===0){
         setFotoStatus("error");
-        setFotoMsg("❌ Nessun turno riconosciuto. Prova con una foto più nitida.");
+        setFotoMsg("\u274c Nessun turno riconosciuto. Prova con una foto pi\xf9 nitida e ben illuminata.");
         setFotoImporting(false);
         return;
       }
@@ -1211,16 +1210,17 @@ function DriverDetail({driver,onBack,onUpdate,fire}){
 
       if(preview.length===0){
         setFotoStatus("error");
-        setFotoMsg("❌ Nessun turno valido. Controlla che la foto sia leggibile.");
+        setFotoMsg("\u274c Nessun turno valido estratto. Controlla la foto e riprova.");
       } else {
         setFotoStatus("ok");
-        setFotoMsg("✅ "+preview.length+" turni riconosciuti — controlla e conferma");
+        setFotoMsg("\u2705 "+preview.length+" turni riconosciuti \u2014 controlla e conferma");
         setImportPreview(preview);
       }
+
     }catch(err){
       console.error("handleFoto error:",err);
       setFotoStatus("error");
-      setFotoMsg("❌ "+err.message);
+      setFotoMsg("\u274c "+err.message);
     }
     setFotoImporting(false);
   }
@@ -2623,44 +2623,44 @@ function GuidaView({pinAbilitato,onSetPin,onRemovePin,syncStatus,lastSync,notifP
           },syncStatus==="syncing"?"…":"Sync ora")
         ),
 
-        // API KEY ANTHROPIC — riconoscimento foto AI
+        // WORKER CLOUDFLARE — riconoscimento foto AI
         (()=>{
-          const [apiKey,setApiKey]=useState(()=>localStorage.getItem("anm_anthropic_key")||"");
-          const [apiSaved,setApiSaved]=useState(!!localStorage.getItem("anm_anthropic_key"));
-          function saveKey(){
-            const v=apiKey.trim();
-            if(v){localStorage.setItem("anm_anthropic_key",v);setApiSaved(true);}
-            else{localStorage.removeItem("anm_anthropic_key");setApiSaved(false);}
+          const [wUrl,setWUrl]=useState(()=>localStorage.getItem("anm_worker_url")||"");
+          const [wSaved,setWSaved]=useState(!!localStorage.getItem("anm_worker_url"));
+          function saveWorker(){
+            const v=wUrl.trim();
+            if(v){localStorage.setItem("anm_worker_url",v);setWSaved(true);}
+            else{localStorage.removeItem("anm_worker_url");setWSaved(false);}
           }
           return React.createElement('div',{style:{padding:"13px 16px",borderTop:"1px solid var(--border)"}},
             React.createElement('div',{style:{display:"flex",alignItems:"center",gap:10,marginBottom:8}},
               React.createElement('div',{style:{width:36,height:36,borderRadius:9,flexShrink:0,
-                background:apiSaved?"rgba(167,139,250,.15)":"rgba(255,255,255,.05)",
-                border:"1px solid "+(apiSaved?"rgba(167,139,250,.3)":"var(--border2)"),
+                background:wSaved?"rgba(167,139,250,.15)":"rgba(255,255,255,.05)",
+                border:"1px solid "+(wSaved?"rgba(167,139,250,.3)":"var(--border2)"),
                 display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}},"🤖"),
               React.createElement('div',{style:{flex:1}},
                 React.createElement('div',{style:{fontSize:13,fontWeight:700,color:"var(--txt)"}},
-                  apiSaved?"API Key salvata ✓":"API Key Anthropic (foto AI)"
+                  wSaved?"Worker configurato ✓":"Worker Cloudflare (foto AI)"
                 ),
                 React.createElement('div',{style:{fontSize:11,color:"var(--txt3)",marginTop:1}},
-                  "Serve per riconoscere turni dalle foto. Ottienila su console.anthropic.com"
+                  "Inserisci l'URL del tuo Worker dopo averlo creato su cloudflare.com"
                 )
               )
             ),
             React.createElement('div',{style:{display:"flex",gap:6}},
               React.createElement('input',{
-                type:"password",
-                placeholder:"sk-ant-api03-…",
-                value:apiKey,
-                onChange:ev=>setApiKey(ev.target.value),
+                type:"url",
+                placeholder:"https://anm-proxy.tuonome.workers.dev",
+                value:wUrl,
+                onChange:ev=>setWUrl(ev.target.value),
                 style:{flex:1,background:"var(--bg4)",border:"1px solid var(--border2)",borderRadius:7,
                   padding:"7px 10px",color:"var(--txt)",fontFamily:"'Space Mono',monospace",fontSize:11,outline:"none"}
               }),
               React.createElement('button',{
-                onClick:saveKey,
+                onClick:saveWorker,
                 style:{background:"rgba(167,139,250,.15)",border:"1px solid rgba(167,139,250,.3)",color:"#a78bfa",
                   padding:"7px 11px",borderRadius:7,cursor:"pointer",fontFamily:"'DM Sans',sans-serif",fontWeight:700,fontSize:11,flexShrink:0}
-              },apiSaved?"Aggiorna":"Salva")
+              },wSaved?"Aggiorna":"Salva")
             )
           );
         })(),
