@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ANM Turni — QR Code</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0f;color:#e8e8f0;font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.card{background:#111118;border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:36px 28px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.badge{display:inline-block;background:#f5a623;color:#0a0a0f;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:4px 14px;border-radius:6px;letter-spacing:.5px;margin-bottom:18px;}
+h1{font-size:26px;font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+h1 span{color:#f5a623}
+.sub{font-size:13px;color:#8888a0;margin-bottom:26px;line-height:1.6}
+.qr-wrap{background:white;border-radius:20px;padding:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 0 0 6px rgba(245,166,35,.2);min-width:200px;min-height:200px;}
+.url{background:#16161f;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 14px;font-family:'Space Mono',monospace;font-size:10px;color:#f5a623;word-break:break-all;margin-bottom:8px;}
+.hint{font-size:11px;color:#4a4a60;margin-bottom:22px;}
+.btn{width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#f5a623,#e8951a);border:none;color:#0a0a0f;font-family:'DM Sans',sans-serif;font-weight:800;font-size:14px;cursor:pointer;margin-bottom:10px;}
+.btn-ghost{width:100%;padding:13px;border-radius:12px;background:none;border:1px solid rgba(255,255,255,.1);color:#8888a0;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
+.steps{text-align:left;background:#16161f;border-radius:12px;padding:14px 16px;margin-top:16px;}
+.steps-title{font-size:10px;font-weight:700;color:#f5a623;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;}
+.step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.step:last-child{margin-bottom:0}
+.step-num{width:20px;height:20px;border-radius:5px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:#f5a623;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Mono',monospace;}
+.step-txt{font-size:11px;color:#8888a0;line-height:1.5;}
+.step-txt strong{color:#e8e8f0;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">🚌 ANM · Napoli</div>
+  <h1>Gestione <span>Turni</span></h1>
+  <p class="sub">Inquadra il QR code con la fotocamera per aprire l'app.</p>
+
+  <div class="qr-wrap" id="qr-wrap">
+    <div id="qrcode"></div>
+  </div>
+
+  <div class="url">https://chicco81.github.io/ANM-QUINDICINALE-/</div>
+  <div class="hint">Tocca il pulsante per copiare il link</div>
+
+  <button class="btn" onclick="copia()">📋 Copia link</button>
+  <button class="btn-ghost" onclick="window.open('https://chicco81.github.io/ANM-QUINDICINALE-/','_blank')">🚀 Apri l'app</button>
+
+  <div class="steps">
+    <div class="steps-title">📱 Come installare</div>
+    <div class="step"><div class="step-num">1</div><div class="step-txt">Inquadra il QR con la fotocamera o apri il link</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-txt"><strong>iPhone:</strong> Condividi → "Aggiungi a schermata Home"</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-txt"><strong>Android:</strong> menu ⋮ → "Aggiungi a schermata Home"</div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const URL_APP="https://chicco81.github.io/ANM-QUINDICINALE-/";
+
+window.addEventListener('load',function(){
+  new QRCode(document.getElementById("qrcode"),{
+    text:URL_APP,
+    width:200,height:200,
+    colorDark:"#000000",
+    colorLight:"#ffffff",
+    correctLevel:QRCode.CorrectLevel.H
+  });
+});
+
+function copia(){
+  navigator.clipboard.writeText(URL_APP).then(()=>{
+    const btn=document.querySelector('.btn');
+    btn.textContent="✅ Copiato!";
+    setTimeout(()=>btn.textContent="📋 Copia link",2000);
+  }).catch(()=>{
+    const el=document.createElement('textarea');
+    el.value=URL_APP;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);
+    const btn=document.querySelector('.btn');btn.textContent="✅ Copiato!";
+    setTimeout(()=>btn.textContent="📋 Copia link",2000);
+  });
+}
+</script>
+</body>
+</html>
