@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#f5a623"/>
+<title>Guida Completa — ANM Turni</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#16161f;--bg4:#1c1c28;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);
+  --txt:#e8e8f0;--txt2:#8888a0;--txt3:#4a4a60;
+  --anm:#f5a623;--anm2:#e8951a;--anm-dim:rgba(245,166,35,.12);
+  --blue:#4f8ef7;--blue-dim:rgba(79,142,247,.12);
+  --green:#3ecf8e;--green-dim:rgba(62,207,142,.1);
+  --red:#f75f5f;--red-dim:rgba(247,95,95,.1);
+  --purple:#a78bfa;--purple-dim:rgba(167,139,250,.12);
+  --r:14px;--r2:9px;
+}
+html{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;line-height:1.6;scroll-behavior:smooth}
+body{max-width:780px;margin:0 auto;padding:0 0 80px}
+
+.hero{background:linear-gradient(135deg,#111118 0%,#16161f 60%,rgba(245,166,35,.12) 100%);
+  border-bottom:1px solid var(--border2);padding:48px 28px 36px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-60px;right:-60px;width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,166,35,.2) 0%,transparent 70%)}
+.badge{display:inline-flex;align-items:center;background:var(--anm);color:#0a0a0f;
+  font-family:'Space Mono',monospace;font-size:12px;font-weight:700;padding:4px 12px;
+  border-radius:6px;letter-spacing:.5px;margin-bottom:20px}
+.hero h1{font-size:32px;font-weight:900;letter-spacing:-.8px;margin-bottom:8px}
+.hero h1 span{color:var(--anm)}
+.hero p{font-size:14px;color:var(--txt2);max-width:520px;line-height:1.7;margin-bottom:16px}
+.version{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:20px;padding:4px 12px;font-size:11px;color:var(--txt3);font-family:'Space Mono',monospace}
+.new-badge{display:inline-flex;align-items:center;background:rgba(62,207,142,.15);
+  border:1px solid rgba(62,207,142,.3);color:var(--green);font-size:9px;font-weight:800;
+  padding:2px 7px;border-radius:4px;font-family:'Space Mono',monospace;vertical-align:middle;margin-left:6px}
+
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin:24px 28px;padding:20px 22px}
+.toc-title{font-size:11px;font-weight:700;color:var(--anm);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.toc-link{display:flex;align-items:center;gap:9px;color:var(--txt2);text-decoration:none;
+  font-size:12px;font-weight:500;padding:6px 8px;border-radius:8px;transition:background .15s}
+.toc-link:hover{background:var(--bg3);color:var(--txt)}
+.toc-num{width:22px;height:22px;border-radius:6px;background:var(--anm-dim);border:1px solid rgba(245,166,35,.25);
+  color:var(--anm);font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-family:'Space Mono',monospace}
+
+.section{padding:0 28px;margin-bottom:44px}
+.section-header{display:flex;align-items:center;gap:14px;padding:22px 0 16px;
+  border-bottom:1px solid var(--border);margin-bottom:22px}
+.section-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;font-size:26px;flex-shrink:0}
+.section-title{font-size:22px;font-weight:800;letter-spacing:-.4px}
+.section-sub{font-size:12px;color:var(--txt3);margin-top:3px}
+
+.step{display:flex;gap:14px;margin-bottom:12px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden}
+.sb{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+.sn{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px;font-family:'Space Mono',monospace}
+.st{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:4px}
+.sd{font-size:13px;color:var(--txt2);line-height:1.65}
+code{background:var(--bg4);padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:12px;color:var(--anm)}
+
+.note{display:flex;gap:12px;border-radius:var(--r2);padding:12px 15px;margin:12px 0;font-size:12px;line-height:1.65}
+.nic{font-size:16px;flex-shrink:0;margin-top:1px}
+.note.info{background:var(--blue-dim);border:1px solid rgba(79,142,247,.25);color:var(--blue)}
+.note.warn{background:var(--anm-dim);border:1px solid rgba(245,166,35,.3);color:var(--anm)}
+.note.success{background:var(--green-dim);border:1px solid rgba(62,207,142,.25);color:var(--green)}
+.note.danger{background:var(--red-dim);border:1px solid rgba(247,95,95,.25);color:var(--red)}
+.note.purple{background:var(--purple-dim);border:1px solid rgba(167,139,250,.25);color:var(--purple)}
+
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 9px;
+  font-size:11px;font-weight:700;border:1px solid;vertical-align:middle}
+.ca{background:var(--anm-dim);border-color:rgba(245,166,35,.35);color:var(--anm)}
+.cb{background:var(--blue-dim);border-color:rgba(79,142,247,.35);color:var(--blue)}
+.cg{background:var(--green-dim);border-color:rgba(62,207,142,.35);color:var(--green)}
+.cr{background:var(--red-dim);border-color:rgba(247,95,95,.35);color:var(--red)}
+.cp{background:var(--purple-dim);border-color:rgba(167,139,250,.35);color:var(--purple)}
+.cz{background:var(--bg3);border-color:var(--border2);color:var(--txt2)}
+
+.glossary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.gitem{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.gterm{font-size:12px;font-weight:800;color:var(--anm);margin-bottom:4px}
+.gdef{font-size:11px;color:var(--txt2);line-height:1.5}
+
+.divider{height:1px;background:var(--border);margin:10px 0 20px}
+.footer{text-align:center;padding:32px 28px;color:var(--txt3);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
+
+@media(max-width:600px){
+  .hero{padding:32px 18px 26px}.section{padding:0 16px}
+  .toc{margin:16px}.hero h1{font-size:24px}.toc-grid{grid-template-columns:1fr}
+  .glossary{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">📋 Manuale Operativo</div>
+  <h1>Guida <span>ANM Turni</span></h1>
+  <p>Manuale completo per la gestione dei turni degli autisti ANM Napoli. Tutte le funzionalità: PDF, foto AI, depositi monto/smonto, cambi turno, rubrica, passaggi, backup e molto altro.</p>
+  <div class="version">🗓 Versione 2026 · 21 sezioni · ANM Napoli</div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">📑 Indice</div>
+  <div class="toc-grid">
+    <a class="toc-link" href="#s1"><span class="toc-num">1</span> Struttura dell'app</a>
+    <a class="toc-link" href="#s2"><span class="toc-num">2</span> Vista Giornata</a>
+    <a class="toc-link" href="#s3"><span class="toc-num">3</span> Quindicinale PDF e Foto AI</a>
+    <a class="toc-link" href="#s4"><span class="toc-num">4</span> Calendario e Dettaglio Giorno</a>
+    <a class="toc-link" href="#s5"><span class="toc-num">5</span> Assegnare e Modificare Turni</a>
+    <a class="toc-link" href="#s6"><span class="toc-num">6</span> Monto, Smonto e Depositi</a>
+    <a class="toc-link" href="#s7"><span class="toc-num">7</span> Vetture e Codici SAE</a>
+    <a class="toc-link" href="#s8"><span class="toc-num">8</span> Statistiche ed Export CSV</a>
+    <a class="toc-link" href="#s9"><span class="toc-num">9</span> Inviare Turni via WA/TG</a>
+    <a class="toc-link" href="#s10"><span class="toc-num">10</span> Gestione Cambi Turno</a>
+    <a class="toc-link" href="#s11"><span class="toc-num">11</span> Rubrica Contatti</a>
+    <a class="toc-link" href="#s11b"><span class="toc-num">11b</span> 🚗 Messaggi Passaggi</a>
+    <a class="toc-link" href="#s12"><span class="toc-num">12</span> Gestire gli Autisti</a>
+    <a class="toc-link" href="#s13"><span class="toc-num">13</span> Backup e Ripristino</a>
+    <a class="toc-link" href="#s14"><span class="toc-num">14</span> 🔒 PIN di Accesso</a>
+    <a class="toc-link" href="#s15"><span class="toc-num">15</span> ☁️ Sincronizzazione Cloud</a>
+    <a class="toc-link" href="#s16"><span class="toc-num">16</span> 🔔 Notifiche Push</a>
+    <a class="toc-link" href="#s17"><span class="toc-num">17</span> 📲 Condividere l'app</a>
+    <a class="toc-link" href="#s18"><span class="toc-num">18</span> 🤖 Worker Cloudflare (Foto AI)</a>
+    <a class="toc-link" href="#s19"><span class="toc-num">19</span> Installare come App (PWA)</a>
+    <a class="toc-link" href="#s20"><span class="toc-num">20</span> Problemi Frequenti (FAQ)</a>
+  </div>
+</div>
+
+<!-- S1 -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--anm-dim)">📱</div>
+    <div><div class="section-title">Struttura dell'app</div><div class="section-sub">Navigazione e interfaccia principale</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">1</div><div><div class="st">Barra di navigazione in basso</div><div class="sd">8 pulsanti: <span class="chip ca">📆 Giornata</span> <span class="chip ca">👥 Autisti</span> <span class="chip ca">🔄 Cambi</span> <span class="chip ca">📒 Rubrica</span> <span class="chip ca">🚗 Passaggi</span> <span class="chip cg">💬 WA</span> <span class="chip cb">✈️ TG</span> <span class="chip cp">📖 Guida</span></div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">2</div><div><div class="st">Header in cima</div><div class="sd">Badge ANM · titolo Gestione Turni · badge ☁️ sync · pulsante 🌙/☀️ tema · pulsante 🔒/🔓 PIN · contatore autisti.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">3</div><div><div class="st">Tema chiaro / scuro</div><div class="sd">Tocca 🌙 per il tema chiaro ☀️ e viceversa. La preferenza viene salvata. Il tema scuro protegge la vista di notte e risparmia batteria.</div></div></div>
+</div>
+
+<!-- S2 -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--anm-dim)">📆</div>
+    <div><div class="section-title">Vista Giornata</div><div class="section-sub">Panoramica di tutti i turni del giorno</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">1</div><div><div class="st">Navigare tra i giorni</div><div class="sd">Usa ‹ e › per andare al giorno precedente o successivo. Tocca la data per scegliere qualsiasi giorno. Se non sei su oggi compare il pulsante arancione <span class="chip ca">📅 Torna a Oggi</span>.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">2</div><div><div class="st">Statistiche rapide</div><div class="sd">Tre riquadri: <b>Con turno</b> (autisti che lavorano) · <b>Senza turno</b> (liberi o senza quindicinale) · <b>Totale</b> (visibili con i filtri attivi).</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">3</div><div><div class="st">Filtri</div><div class="sd">Per stato: <span class="chip cz">Tutti</span> <span class="chip cg">✓ Turno</span> <span class="chip cr">✗ Vuoti</span>. Per tipo contratto: <span class="chip ca">ANM</span> <span class="chip cb">INT</span>. Campo 🚌 per filtrare per linea (es. R3, 151, C1).</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">4</div><div><div class="st">Ricerca</div><div class="sd">La barra di ricerca accetta: nome, cognome, matricola, linea, orario (es. <code>06:00</code>).</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">5</div><div><div class="st">Card autista e invio turno</div><div class="sd">Ogni card mostra nome, matricola, tipo, vettura, telefono. Tocca 💬 o ✈️ per inviare il turno. Tocca il nome per aprire la scheda completa.</div></div></div>
+</div>
+
+<!-- S3 -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--green-dim)">📄</div>
+    <div><div class="section-title">Quindicinale PDF e Foto AI <span class="new-badge">NEW</span></div><div class="section-sub">Importazione automatica dei turni</div></div>
+  </div>
+  <div class="note warn"><span class="nic">ℹ️</span><span>Il quindicinale è il foglio ufficiale ANM con i turni dei 15 giorni successivi. L'app legge automaticamente: turno, orario, linea, <b>località monto</b> (es. CVAO, SUALE1) e <b>tipo smonto</b> (Dep/Linea).</span></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">1</div><div><div class="st">Aprire la scheda autista</div><div class="sd">Tab 👥 Autisti → cerca l'autista → toccalo → tab 📄 Quindicinale.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">2</div><div><div class="st">📂 Carica PDF</div><div class="sd">Tocca il pulsante arancione → seleziona il file PDF originale ANM. L'app mostra l'anteprima con tutti i dati trovati. Tocca <b>✓ Importa</b> per confermare.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">3</div><div><div class="st">📸 Carica foto (AI) <span class="new-badge">NEW</span></div><div class="sd">Tocca il pulsante blu → seleziona la foto del quindicinale dalla galleria. Claude AI analizza la foto e riconosce tutti i turni automaticamente. Stessa anteprima del PDF — tocca ✓ Importa. Richiede il Worker Cloudflare configurato (vedi sezione 18).</div></div></div>
+  <div class="note info"><span class="nic">📸</span><span>Consigli per la foto: illumina bene, fotografa in piano, testo nitido. Funziona con quindicinali stampati e scritti a mano.</span></div>
+  <div class="step"><div class="sb" style="background:var(--red)"></div><div class="sn" style="background:var(--red-dim);color:var(--red)">4</div><div><div class="st">🗑 Rimuovere i turni <span class="new-badge">NEW</span></div><div class="sd">Sotto i pulsanti Carica: <span class="chip ca">Mar (30)</span> <span class="chip ca">Apr (1)</span> rimuovono i turni mese per mese. <span class="chip cr">❌ Tutti</span> cancella tutto. Viene sempre chiesta conferma.</div></div></div>
+  <div class="note warn"><span class="nic">⚠️</span><span>Se carichi un nuovo PDF su un autista già caricato, i nuovi turni si aggiungono — i giorni in comune vengono aggiornati.</span></div>
+</div>
+
+<!-- S4 -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-dim)">📅</div>
+    <div><div class="section-title">Calendario e Dettaglio Giorno</div><div class="section-sub">Visualizzare e gestire i turni del mese</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">1</div><div><div class="st">Leggere il calendario</div><div class="sd">🌅 arancione = mattina · ☀️ blu = pomeriggio · 🌙 viola = notte · 🛌 verde = riposo · 🏖️ rosa = ferie · 🏥 rosso = malattia · 📝 permesso · 🎉 festivo · ✂️ spezzato · 📋 disponibilità. Celle grigie = nessun turno.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">2</div><div><div class="st">Aprire il pannello giorno</div><div class="sd">Tocca qualsiasi giorno per aprire il pannello dal basso. Trovi: tipo turno · ⏰ Orario monto→smonto (✏️) · 📍 Monto→Smonto località (✏️) · vetture · SAE · pulsanti Invia/Richiedi.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">3</div><div><div class="st">Navigare i mesi</div><div class="sd">Usa ‹ e › nella barra del calendario. Le statistiche mensili (Servizi, Riposi, Ferie…) si aggiornano automaticamente.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">4</div><div><div class="st">Chiudere il pannello</div><div class="sd">Tocca ✕ in basso a destra, oppure tocca l'area scura fuori dal pannello.</div></div></div>
+</div>
+
+<!-- S5 -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--anm-dim)">✏️</div>
+    <div><div class="section-title">Assegnare e Modificare Turni</div><div class="section-sub">Assegnazione manuale e correzione</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">1</div><div><div class="st">Assegnare un turno</div><div class="sd">Pannello giorno → ✏️ Assegna turno (o Cambia turno). Si apre il selettore con turni manuali e preimpostati.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">2</div><div><div class="st">Turno manuale</div><div class="sd">Inserisci <b>Monto</b> (es. <code>06:35</code>), <b>Smonto</b> (es. <code>13:10</code>), <b>Linea</b> (opzionale, es. <code>R3</code>). Tocca ✓ Assegna turno manuale.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">3</div><div><div class="st">Turni preimpostati</div><div class="sd"><span class="chip ca">📌 Servizi</span> Mattina/Pomeriggio/Notte · <span class="chip ca">✂️ Spezzati</span> Apertura/Chiusura · <span class="chip ca">📋 Disponibilità</span> Mattina/Serale/Notturna · <span class="chip cg">🛌 Riposi</span> Riposo, Ferie, Malattia, Permesso, Festivo, Rip. Compensativo.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">4</div><div><div class="st">Correggere l'orario</div><div class="sd">Pannello giorno → riga ⏰ Orario turno (✏️) → correggi Monto e Smonto → ✓ Salva orario.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--red)"></div><div class="sn" style="background:var(--red-dim);color:var(--red)">5</div><div><div class="st">Rimuovere un turno</div><div class="sd">Pannello giorno → pulsante 🗑 Rimuovi in basso. Elimina il turno solo per quel giorno.</div></div></div>
+</div>
+
+<!-- S6 -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-dim)">📍</div>
+    <div><div class="section-title">Monto, Smonto e Depositi <span class="new-badge">NEW</span></div><div class="section-sub">Gestione delle località di partenza e arrivo</div></div>
+  </div>
+  <div class="note info"><span class="nic">ℹ️</span><span>Il quindicinale ANM indica per ogni turno: la <b>Località monto</b> (dove si prende il mezzo, es. CVAO, SUALE1, CARD2) e il <b>Tipo smonto</b> (Dep = rientra in deposito, Linea = smonta in linea). L'app legge questi dati dal PDF e li mostra nel pannello giorno.</span></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">1</div><div><div class="st">Dati automatici dal PDF</div><div class="sd">Caricando il PDF, la riga 📍 <b>Monto → Smonto</b> nel pannello giorno mostra automaticamente i valori esatti del quindicinale (es. <code>CVAO → Dep</code> o <code>SUALE1 → Linea</code>).</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">2</div><div><div class="st">Modificare Monto/Smonto</div><div class="sd">Pannello giorno → riga 📍 Monto → Smonto (✏️). Si apre l'editor con:<br>• <b>Località monto</b>: campo libero per scrivere qualsiasi valore (es. <code>CVAO</code>, <code>Piazza Garibaldi</code>)<br>• <b>Smonto</b>: pulsanti rapidi <span class="chip cb">Dep</span> <span class="chip cb">Linea</span> oppure campo libero per altro.<br>Tocca ✓ Salva.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">3</div><div><div class="st">Abbreviazioni ANM più comuni</div><div class="sd"><code>CVAO</code> = Cav. Aosta · <code>SUALE1/2</code> = Secondigliano · <code>CARD1/2</code> = Carlo III · <code>PUGLIE</code> = Via Puglie · <code>SGI</code> = San Giovanni. Puoi sempre scrivere il valore esatto che compare nel tuo quindicinale.</div></div></div>
+  <div class="note success"><span class="nic">✅</span><span>Usa la riga 📍 anche per annotare cambi di stazionamento comunicati dal superiore — tocca ✏️ e modifica in qualsiasi momento.</span></div>
+</div>
+
+<!-- S7 -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--anm-dim)">🚍</div>
+    <div><div class="section-title">Vetture e Codici SAE</div><div class="section-sub">Inserire il mezzo assegnato e il codice servizio</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">1</div><div><div class="st">Aggiungere una vettura</div><div class="sd">Pannello giorno → sezione 🚍 Vetture → digita il numero (es. <code>4521</code> o <code>EX302</code>) → + Aggiungi. Puoi aggiungerne più di una.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">2</div><div><div class="st">Aggiungere un codice SAE</div><div class="sd">Sezione 🔖 Codice SAE → inserisci il codice numerico → + Aggiungi.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">3</div><div><div class="st">Dove appaiono</div><div class="sd">Vetture e SAE appaiono nella Vista Giornata accanto all'autista e nei messaggi WhatsApp/Telegram inviati.</div></div></div>
+</div>
+
+<!-- S8 -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-dim)">📊</div>
+    <div><div class="section-title">Statistiche ed Export CSV</div><div class="section-sub">Riepilogo mensile e esportazione dati</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">1</div><div><div class="st">Statistiche mensili</div><div class="sd">Scheda autista → tab 📅 Calendario → in cima trovi il riepilogo del mese: Servizi, Riposi, Ferie, Malattie, Permessi, Spezzati, Disponibilità.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">2</div><div><div class="st">Export CSV mensile</div><div class="sd">Tocca il pulsante 📥 Esporta CSV mensile. Il file scaricato contiene: Data, Giorno, Turno, Linea, Monto, Smonto, Note. Aprilo con Excel o Google Sheets.</div></div></div>
+</div>
+
+<!-- S9 -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--green-dim)">💬</div>
+    <div><div class="section-title">Inviare Turni via WhatsApp/Telegram</div><div class="section-sub">Condivisione rapida dei turni</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">1</div><div><div class="st">Riepilogo di tutti (barra in basso)</div><div class="sd">Tocca 💬 WA o ✈️ TG nella barra in basso. Invia il riepilogo completo dei turni di OGGI: autisti raggruppati per tipo turno con nome e matricola. Ideale per il gruppo di lavoro.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">2</div><div><div class="st">Turno di un singolo autista</div><div class="sd">Vista Giornata → tocca 💬 o ✈️ sotto il nome dell'autista. Messaggio automatico con: nome, matricola, data, turno, orario, linea, vettura.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">3</div><div><div class="st">📤 Invia / 📲 Richiedi dal pannello giorno</div><div class="sd">Pannello giorno → scorri in basso. <b>📤 Invia turno</b> = manda i tuoi dettagli al collega. <b>📲 Richiedi turno</b> = chiedi al collega di inviarti il suo. Cerca il collega per nome o matricola, aggiungi nota opzionale, scegli 💬 WA o ✈️ TG.</div></div></div>
+</div>
+
+<!-- S10 -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--red-dim)">🔄</div>
+    <div><div class="section-title">Gestione Cambi Turno</div><div class="section-sub">Generatore rapido + tre tipi di cambio</div></div>
+  </div>
+
+  <div class="note info"><span class="nic">📨</span><span>Il tab 🔄 Cambi ha ora un <b>Generatore Rapido</b> in cima: imposti i tuoi dati una volta sola, selezioni il giorno e invii il messaggio di cambio in pochi secondi.</span></div>
+
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">1</div><div><div class="st">📨 Configurare i tuoi dati (solo la prima volta)</div><div class="sd">Tab 🔄 Cambi → tocca il riquadro <b>"Il mio cambio"</b> → inserisci <b>Nome e Cognome</b> e <b>Matricola</b> → tocca ✓ Salva dati. Da quel momento i tuoi dati sono memorizzati e non devi reinserirli. Puoi modificarli in qualsiasi momento con il pulsante ✏️.</div></div></div>
+
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">2</div><div><div class="st">Selezionare il giorno del cambio</div><div class="sd">Tocca il campo data e scegli il giorno per cui vuoi il cambio. Se hai il quindicinale PDF caricato per quel giorno, <b>linea e orari si compilano automaticamente</b>. Altrimenti inseriscili a mano: Linea (es. 147/2), orario Monto (es. 05:15) e Smonto (es. 12:10).</div></div></div>
+
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">3</div><div><div class="st">Scegliere il motivo</div><div class="sd">Tre opzioni: <span class="chip ca">📍 Attestamento diverso</span> → scrive "per attestamento diverso". <span class="chip cg">🌅 Per mattina</span> → scrive "per mattina". <span class="chip cb">✏️ Testo libero</span> → scrivi quello che vuoi (es. "cambio con Rossi Mario mat. 18500").</div></div></div>
+
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">4</div><div><div class="st">Anteprima e invio</div><div class="sd">Il messaggio si aggiorna in tempo reale nell'anteprima. Esempio: <em>Esposito Ciro mat. 50270 per Domenica 19 Aprile cambio 147/2 05:15-12:10 per attestamento diverso</em>. Tocca <b>💬 WA + Copia</b> o <b>✈️ TG + Copia</b>: il messaggio viene <b>copiato automaticamente negli appunti</b> e l'app si apre. Oppure tocca 📋 per copiare senza aprire nessuna app.</div></div></div>
+
+  <div class="note success"><span class="nic">💡</span><span>Il messaggio viene sempre copiato negli appunti — anche se WA o Telegram non si aprono subito (offline o app non installata), puoi incollarlo direttamente nel gruppo che preferisci.</span></div>
+
+  <div class="divider"></div>
+
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">5</div><div><div class="st">Tipi di cambio nella lista autisti</div><div class="sd">Dalla scheda di ogni autista → tab 🔄 Cambi → ➕ Aggiungi: <b>🔍 Cerca cambio</b> (bordo blu), <b>📢 Offre turno</b> (bordo arancione), <b>🔁 Sostituzione</b> (bordo verde). Ogni cambio ha 💬 WA, ✈️ TG, ✓ Accetta e 🗑 Elimina.</div></div></div>
+
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">6</div><div><div class="st">Vista globale cambi</div><div class="sd">Tab 🔄 Cambi nella barra in basso mostra TUTTI i cambi di TUTTI gli autisti. I cambi "In attesa" appaiono in cima con il bordo rosso. Il pallino rosso sul tab indica quante richieste sono in sospeso.</div></div></div>
+</div>
+
+<!-- S11 -->
+<div class="section" id="s11">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-dim)">📒</div>
+    <div><div class="section-title">Rubrica Contatti</div><div class="section-sub">862 contatti ANM Napoli</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">1</div><div><div class="st">Aprire la Rubrica</div><div class="sd">Tocca il tab 📒 Rubrica nella barra in basso. 862 contatti con nome, cognome, matricola, deposito e telefono. Dati dall'Excel ufficiale ANM aggiornato a gennaio 2024.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">2</div><div><div class="st">Cercare un contatto</div><div class="sd">Usa la barra di ricerca per nome, cognome, matricola o numero di telefono. Ricerca in tempo reale.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">3</div><div><div class="st">Filtrare per deposito</div><div class="sd">Pulsanti: <span class="chip ca">Cav.Aosta</span> <span class="chip ca">Puglie</span> <span class="chip ca">Carlo III</span> <span class="chip ca">S.Giovanni</span> <span class="chip cz">—</span> <span class="chip cz">Tutti</span></div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">4</div><div><div class="st">Chiamare o WhatsApp</div><div class="sd">Tocca 💬 per aprire WhatsApp direttamente in chat. Tocca 📞 per la chiamata telefonica diretta.</div></div></div>
+</div>
+
+<!-- S11b -->
+<div class="section" id="s11b">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(37,209,102,.15)">🚗</div>
+    <div><div class="section-title">Messaggi Passaggi <span class="new-badge">NEW</span></div><div class="section-sub">Offri o cerca un passaggio in pochi secondi</div></div>
+  </div>
+  <div class="note info"><span class="nic">ℹ️</span><span>Il tab 🚗 Passaggi serve per inviare rapidamente messaggi ai colleghi per organizzare spostamenti da/verso i depositi. Hai 3 modelli preimpostati, personalizzabili al momento.</span></div>
+
+  <div class="step"><div class="sb" style="background:#25D166"></div><div class="sn" style="background:rgba(37,209,102,.15);color:#25D166">1</div><div><div class="st">🚗 Offro passaggio</div><div class="sd">Usa questo modello quando puoi dare un passaggio a un collega. Scegli: <b>quando</b> (oggi, domani, stamattina…), <b>mezzo</b> (Auto, Scooter…), <b>punto di partenza</b> (da lista depositi oppure scrivi liberamente dove vuoi), <b>destinazione</b> (campo libero). Il messaggio si genera automaticamente in anteprima.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">2</div><div><div class="st">🙏 Cerco passaggio</div><div class="sd">Usa questo modello quando <b>hai bisogno</b> di un passaggio. Indica da dove parti (campo libero, es. casa tua, Giugliano, Qualiano…) e la destinazione (lista depositi o scrivo liberamente). Perfetto per la mattina quando non hai mezzo e vuoi aggregarti.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">3</div><div><div class="st">✏️ Messaggio libero</div><div class="sd">Scrivi qualsiasi messaggio e invialo direttamente. Utile per comunicazioni fuori dai modelli standard.</div></div></div>
+
+  <div class="note warn"><span class="nic">💡</span><span><b>Toggle 📋 Lista / ✏️ Scrivi:</b> ogni campo luogo ha un pulsante per scegliere se selezionare da una lista di depositi/capolinea oppure scrivere liberamente l'indirizzo. Il punto di partenza è di default "Scrivi" perché spesso si parte da casa propria.</span></div>
+
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">4</div><div><div class="st">Aprire e chiudere le card</div><div class="sd">Tocca il titolo della card per aprirla. Tocca di nuovo (appare la ✕) per chiuderla. Puoi aprire solo una card alla volta oppure passare direttamente da una all'altra.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">5</div><div><div class="st">Inviare il messaggio</div><div class="sd">In fondo alla card compilata trovi 3 pulsanti: <span class="chip cg">💬 WhatsApp</span> apre direttamente la condivisione WhatsApp con il testo già pronto · <span class="chip cb">✈️ Telegram</span> per Telegram · <span class="chip cz">📋 Copia</span> per copiare negli appunti e incollare dove vuoi.</div></div></div>
+
+  <div class="note success"><span class="nic">✅</span><span>L'anteprima del messaggio si aggiorna in <b>tempo reale</b> mentre compili i campi — puoi vedere esattamente come arriverà al collega prima di inviarlo.</span></div>
+
+  <div class="note info"><span class="nic">📋</span><span><b>Lista depositi disponibili:</b> Deposito Cav. Aosta · Deposito Puglie · Deposito Carlo III · Deposito S. Giovanni · Capolinea Posillipo · Capolinea Cardarelli · Capolinea Suárez · Capolinea Fuorigrotta · Capolinea Bagnoli · Via Argine · Piazza Garibaldi · Piazza Dante · Piazza Vittoria — oppure scrivi liberamente qualsiasi luogo.</span></div>
+</div>
+
+<!-- S12 -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-dim)">👥</div>
+    <div><div class="section-title">Gestire gli Autisti</div><div class="section-sub">Aggiungere, modificare, eliminare</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">1</div><div><div class="st">Cercare un autista</div><div class="sd">Tab 👥 Autisti → cerca per nome o matricola. <span class="chip ca">ANM</span> <span class="chip cb">INT</span> filtrano per categoria. Lista di 244 autisti (131 ANM + 113 Interinali).</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">2</div><div><div class="st">Aggiungere un autista</div><div class="sd">Tocca ➕ Aggiungi autista → compila Nome, Cognome, Matricola (ANM: <code>14000–25000</code>, INT: <code>50000–55000</code>), Tipo contratto → ✓ Aggiungi.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">3</div><div><div class="st">Modificare matricola o tipo</div><div class="sd">Tocca ✏️ a destra del nome → modifica → ✓ Salva. I turni già salvati rimangono intatti.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--red)"></div><div class="sn" style="background:var(--red-dim);color:var(--red)">4</div><div><div class="st">Eliminare un autista</div><div class="sd">Pannello modifica (✏️) → scorri in fondo → 🗑 Elimina autista → conferma. Operazione irreversibile: tutti i turni vengono cancellati.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">5</div><div><div class="st">Note e telefono</div><div class="sd">Scheda autista → tab 📄 Quindicinale → sezione NOTE AUTISTA. Salva telefono e note libere (deposito, CQC, preferenze turno, ecc.).</div></div></div>
+</div>
+
+<!-- S13 -->
+<div class="section" id="s13">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--anm-dim)">💾</div>
+    <div><div class="section-title">Backup e Ripristino <span class="new-badge">NEW</span></div><div class="section-sub">Salvare e ripristinare tutti i dati</div></div>
+  </div>
+  <div class="note warn"><span class="nic">⚠️</span><span>Senza sync cloud attiva, i dati vivono solo nel browser del tuo dispositivo. Il backup è essenziale per non perdere i turni.</span></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">1</div><div><div class="st">Eseguire un backup</div><div class="sd">Tab 📖 Guida → Impostazioni → tocca 📥 Backup. Il browser scarica il file <code>anm-backup-DATA.json</code>. Salvalo su Google Drive, iCloud o invialo per email a te stesso.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">2</div><div><div class="st">Ripristinare i dati</div><div class="sd">Tab 📖 Guida → Impostazioni → tocca 📤 Ripristina → seleziona il file JSON. L'app carica tutti i turni e i dati istantaneamente.</div></div></div>
+  <div class="note info"><span class="nic">💡</span><span>Quando farlo: prima di cambiare telefono, prima di aggiornamenti importanti, almeno una volta a settimana se non hai la sync cloud.</span></div>
+</div>
+
+<!-- S14 -->
+<div class="section" id="s14">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--green-dim)">🔒</div>
+    <div><div class="section-title">PIN di Accesso</div><div class="section-sub">Proteggere l'app da accessi non autorizzati</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">1</div><div><div class="st">Impostare il PIN</div><div class="sd">Tab 📖 Guida → Impostazioni → tocca <span class="chip cg">Imposta PIN</span>. Inserisci 4 cifre → reinseriscile per conferma. Se coincidono il PIN è attivo.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">2</div><div><div class="st">Come funziona all'avvio</div><div class="sd">Ogni apertura mostra il tastierino a 4 pallini. Se sbagli, i pallini tremano e si azzerano — riprova subito, nessun limite di tentativi.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--red)"></div><div class="sn" style="background:var(--red-dim);color:var(--red)">3</div><div><div class="st">Rimuovere o cambiare</div><div class="sd">Guida → Impostazioni → <span class="chip cr">Rimuovi</span>. Per cambiarlo: prima rimuovi, poi imposta quello nuovo.</div></div></div>
+  <div class="note danger"><span class="nic">🔑</span><span>PIN dimenticato? Aggiungi <code>?reset=1</code> all'URL (es: <code>https://chicco81.github.io/ANM-QUINDICINALE-/?reset=1</code>) e ricarica. Il PIN viene rimosso senza toccare i dati.</span></div>
+</div>
+
+<!-- S15 -->
+<div class="section" id="s15">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--purple-dim)">☁️</div>
+    <div><div class="section-title">Sincronizzazione Cloud</div><div class="section-sub">Firebase Realtime Database</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">1</div><div><div class="st">A cosa serve</div><div class="sd">Senza sync i dati vivono solo nel browser del tuo dispositivo. Con Firebase Realtime Database tutti i dispositivi vedono gli stessi turni in tempo reale.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">2</div><div><div class="st">Stato sync nell'header</div><div class="sd"><span class="chip cg">☁️ sync</span> verde = ok · ⏳ = sincronizzando · <span class="chip cr">☁️✗</span> rosso = errore · Nessun badge = non configurata.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">3</div><div><div class="st">Cosa viene sincronizzato</div><div class="sd">Tutto: turni, assegnazioni, vetture, SAE, note, telefoni, depositi, cambi. Solo il PIN rimane locale per sicurezza.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">4</div><div><div class="st">Sync manuale</div><div class="sd">Guida → Impostazioni → sezione ☁️ Sync cloud → tocca Sync ora.</div></div></div>
+</div>
+
+<!-- S16 -->
+<div class="section" id="s16">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--blue-dim)">🔔</div>
+    <div><div class="section-title">Notifiche Push</div><div class="section-sub">Avvisi per cambi turno in sospeso</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">1</div><div><div class="st">Attivare le notifiche</div><div class="sd">Tab 📖 Guida → Impostazioni → tocca Attiva accanto a 🔔 → tocca Consenti. Avvisano quando ci sono cambi turno in sospeso — anche con l'app chiusa.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">2</div><div><div class="st">Su iPhone</div><div class="sd">Funzionano SOLO da PWA installata. Prima installa: Safari → Condividi → Aggiungi a schermata Home. Poi riapri dall'icona e attiva dalla Guida.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--blue)"></div><div class="sn" style="background:var(--blue-dim);color:var(--blue)">3</div><div><div class="st">Su Android</div><div class="sd">Funzionano direttamente da Chrome. Puoi anche installare come PWA: menu ⋮ → Aggiungi a schermata Home.</div></div></div>
+</div>
+
+<!-- S17 -->
+<div class="section" id="s17">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--green-dim)">📲</div>
+    <div><div class="section-title">Condividere l'app <span class="new-badge">NEW</span></div><div class="section-sub">QR code e link per i colleghi</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">1</div><div><div class="st">Pagina QR code</div><div class="sd">Vai su <code>https://chicco81.github.io/ANM-QUINDICINALE-/qrcode.html</code> per la pagina QR dedicata. Ha il pulsante 💬 Condividi su WhatsApp con messaggio già pronto.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">2</div><div><div class="st">QR code in Guida</div><div class="sd">In fondo al tab 📖 Guida dell'app trovi il QR code con i pulsanti 📋 Copia link e 💬 Condividi su WhatsApp.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">3</div><div><div class="st">Installare su iPhone</div><div class="sd">Apri Safari → vai all'indirizzo → Condividi → Aggiungi a schermata Home. L'icona ANM Turni appare sulla schermata Home.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--green)"></div><div class="sn" style="background:var(--green-dim);color:var(--green)">4</div><div><div class="st">Installare su Android</div><div class="sd">Apri Chrome → vai all'indirizzo → menu ⋮ → Aggiungi a schermata Home o Installa app.</div></div></div>
+</div>
+
+<!-- S18 -->
+<div class="section" id="s18">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--purple-dim)">🤖</div>
+    <div><div class="section-title">Worker Cloudflare (Foto AI) <span class="new-badge">NEW</span></div><div class="section-sub">Configurazione del proxy per il riconoscimento foto</div></div>
+  </div>
+  <div class="note info"><span class="nic">ℹ️</span><span>Il Worker Cloudflare è un piccolo server gratuito che fa da intermediario tra l'app e l'API di Claude AI. Serve per analizzare le foto dei quindicinali. Va configurato una volta sola.</span></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">1</div><div><div class="st">Creare la chiave API Anthropic</div><div class="sd">Vai su <code>console.anthropic.com</code> → API Keys → Create Key → copia la chiave (inizia con <code>sk-ant-…</code>). Non condividerla mai in chat.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">2</div><div><div class="st">Creare il Worker su Cloudflare</div><div class="sd">Vai su <code>dash.cloudflare.com</code> → Workers & Pages → Create application → Start with Hello World → dai un nome (es. <code>anm-proxy</code>) → Deploy.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">3</div><div><div class="st">Inserire il codice del Worker</div><div class="sd">Edit code → cancella tutto → incolla il codice del file <code>worker-v2.js</code> → trova la riga <code>INSERISCI_QUI_LA_TUA_CHIAVE_API</code> → sostituisci con la tua chiave → Save and Deploy.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">4</div><div><div class="st">Configurare nell'app</div><div class="sd">Tab 📖 Guida → Impostazioni → sezione 🤖 Worker Cloudflare → incolla l'URL del Worker (es. <code>https://anm-proxy.chicco81.workers.dev/</code>) → Salva.</div></div></div>
+  <div class="note success"><span class="nic">✅</span><span>Per verificare che il Worker funzioni, apri l'URL direttamente nel browser — deve rispondere: <b>OK - ANM Proxy attivo</b>.</span></div>
+  <div class="note warn"><span class="nic">💰</span><span>Cloudflare è gratuito fino a 100.000 richieste al giorno. Anthropic costa circa €0,001 a foto. Con 5€ di crediti puoi analizzare migliaia di quindicinali.</span></div>
+</div>
+
+<!-- S19 -->
+<div class="section" id="s19">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--anm-dim)">📱</div>
+    <div><div class="section-title">Installare come App (PWA)</div><div class="section-sub">Usare l'app come una vera app nativa</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">1</div><div><div class="st">Su iPhone / iPad</div><div class="sd">Apri <b>Safari</b> → vai su <code>https://chicco81.github.io/ANM-QUINDICINALE-/</code> → tocca l'icona Condividi (quadrato con freccia ↑) → <b>Aggiungi a schermata Home</b> → Aggiungi. L'icona ANM Turni appare sulla schermata Home.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--anm)"></div><div class="sn" style="background:var(--anm-dim);color:var(--anm)">2</div><div><div class="st">Su Android</div><div class="sd">Apri <b>Chrome</b> → vai all'indirizzo dell'app → menu ⋮ → <b>Aggiungi a schermata Home</b> o <b>Installa app</b> → Installa. L'icona appare sulla schermata Home.</div></div></div>
+  <div class="note success"><span class="nic">✅</span><span>Da PWA l'app si apre a schermo intero senza barra del browser, si comporta come una vera app nativa e su iPhone abilita le notifiche push.</span></div>
+</div>
+
+<!-- S20 -->
+<div class="section" id="s20">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--purple-dim)">❓</div>
+    <div><div class="section-title">Problemi Frequenti (FAQ)</div><div class="section-sub">Soluzioni ai problemi più comuni</div></div>
+  </div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">1</div><div><div class="st">Il PDF non viene letto (0 giorni)</div><div class="sd">Usa solo il PDF originale ANM — non fotografie né scansioni. Se il problema persiste, usa il pulsante 📸 Carica foto oppure inserisci i turni manualmente.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">2</div><div><div class="st">Gli orari sono sbagliati</div><div class="sd">Pannello giorno → riga ⏰ Orario turno (✏️) → correggi Monto e Smonto → ✓ Salva orario.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">3</div><div><div class="st">Monto/Smonto sbagliati</div><div class="sd">Pannello giorno → riga 📍 Monto → Smonto (✏️) → modifica Località monto e Tipo smonto → ✓ Salva.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">4</div><div><div class="st">La foto AI non funziona (load failed)</div><div class="sd">Guida → Impostazioni → 🤖 Worker Cloudflare. Verifica che: 1) l'URL sia salvato correttamente, 2) il Worker risponda "OK - ANM Proxy attivo" quando lo apri nel browser, 3) la chiave API Anthropic abbia crediti attivi su <code>console.anthropic.com</code>.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">5</div><div><div class="st">I turni scompaiono su altro dispositivo</div><div class="sd">Se la sync cloud è attiva (☁️ verde) i dati si sincronizzano automaticamente. Altrimenti usa 📥 Backup per trasferire il file JSON al nuovo dispositivo.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">6</div><div><div class="st">Ho dimenticato il PIN</div><div class="sd">Aggiungi <code>?reset=1</code> all'URL: <code>https://chicco81.github.io/ANM-QUINDICINALE-/?reset=1</code> e ricarica la pagina. Il PIN viene rimosso senza toccare i dati.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">7</div><div><div class="st">WhatsApp non si apre</div><div class="sd">WhatsApp deve essere installato sul dispositivo. Su computer si apre la versione web. Se il browser blocca i link, controlla le impostazioni di sicurezza del browser.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">8</div><div><div class="st">Come si aggiorna l'app</div><div class="sd">Ricarica la pagina dal browser (tieni premuto il pulsante ricarica → Ricarica senza cache), oppure chiudi e riapri l'app se installata come PWA.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">9</div><div><div class="st">Il tab Passaggi non invia il messaggio</div><div class="sd">WhatsApp e Telegram devono essere installati sul dispositivo. Il pulsante <b>💬 WhatsApp</b> apre wa.me con il testo pronto — se WhatsApp non è installato usa <b>📋 Copia</b> e incolla il testo manualmente in qualsiasi chat.</div></div></div>
+  <div class="step"><div class="sb" style="background:var(--purple)"></div><div class="sn" style="background:var(--purple-dim);color:var(--purple)">10</div><div><div class="st">La tastiera si chiude mentre scrivo nei Passaggi</div><div class="sd">Questo problema è stato corretto nell'aggiornamento più recente. Se persiste, forza il ricaricamento della pagina (tieni premuto Ricarica → Ricarica senza cache).</div></div></div>
+
+  <div class="divider"></div>
+  <div class="section-header" style="padding-top:10px">
+    <div><div class="section-title" style="font-size:16px">📚 Glossario termini ANM</div></div>
+  </div>
+  <div class="glossary">
+    <div class="gitem"><div class="gterm">Quindicinale</div><div class="gdef">Foglio ANM con i turni dei 15 giorni successivi, in formato PDF.</div></div>
+    <div class="gitem"><div class="gterm">Monto</div><div class="gdef">Orario in cui l'autista si presenta e sale sul mezzo.</div></div>
+    <div class="gitem"><div class="gterm">Smonto</div><div class="gdef">Orario di fine turno. "Dep" = rientra in deposito, "Linea" = smonta in linea.</div></div>
+    <div class="gitem"><div class="gterm">Località monto</div><div class="gdef">Dove l'autista prende il mezzo (es. CVAO, SUALE1, Piazza Garibaldi).</div></div>
+    <div class="gitem"><div class="gterm">Matricola</div><div class="gdef">ID autista. ANM: 14000–25000 · Interinali: 50000–55000.</div></div>
+    <div class="gitem"><div class="gterm">SAE</div><div class="gdef">Codice numerico del servizio nel sistema gestionale ANM.</div></div>
+    <div class="gitem"><div class="gterm">Spezzato</div><div class="gdef">Turno diviso in due fasce nella stessa giornata.</div></div>
+    <div class="gitem"><div class="gterm">Disponibilità</div><div class="gdef">Turno di riserva — l'autista è reperibile se serve.</div></div>
+    <div class="gitem"><div class="gterm">CVAO</div><div class="gdef">Cavalleggeri d'Aosta — deposito principale ANM.</div></div>
+    <div class="gitem"><div class="gterm">Worker Cloudflare</div><div class="gdef">Proxy gratuito che permette all'app di comunicare con Claude AI per il riconoscimento foto.</div></div>
+    <div class="gitem"><div class="gterm">Passaggio 🚗</div><div class="gdef">Feature del tab omonimo per inviare messaggi ai colleghi per organizzare spostamenti da/verso i depositi. Modelli: Offro passaggio · Cerco passaggio · Libero.</div></div>
+  </div>
+</div>
+
+<div class="footer">
+  ANM Turni · Gestione Turni Autisti ANM Napoli · 2026<br>
+  <span style="color:var(--anm)">chicco81.github.io/ANM-QUINDICINALE-/</span>
+</div>
+
+</body>
+</html>
